@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПИМУ — Магистратура</title>
+</head>
+<body>
+<script>
+Promise.all([0,1,2,3].map(function(i){return fetch('_parts/part'+i).then(function(r){if(!r.ok)throw new Error(r.status);return r.text();});}))
+  .then(function(parts){document.open();document.write(parts.join(''));document.close();})
+  .catch(function(){document.body.innerHTML='<p style="font-family:sans-serif;padding:2rem">ПИМУ: assembling site…</p>';});
+</script>
+</body>
+</html>
