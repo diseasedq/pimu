@@ -516,3 +516,131 @@
         <div class="progress-track"><div class="progress-fill" id="sb-progress-fill" style="width: 0%;"></div></div>
       </div>
     </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <header class="main-header">
+        <div class="header-meta">
+          <h1 id="page-title">Дашборд подготовки</h1>
+          <p id="page-sub">Академический курс освоения 15 вопросов вступительных испытаний ПИМУ</p>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD -->
+      <section class="view-panel active" id="tab-dashboard">
+        <div class="grid-stats">
+          <div class="card-stat card-stat-hero">
+            <div class="card-stat-title">Общий прогресс освоения</div>
+            <div class="card-stat-val" id="dash-pct">0%</div>
+            <div class="progress-track"><div class="progress-fill" id="dash-bar" style="width: 0%;"></div></div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-title">Освоено тем</div>
+            <div class="card-stat-val" id="dash-mastered-num">0 <small style="font-size: 1rem; color: var(--text-secondary);">/ 15</small></div>
+            <span class="badge-status mastered" id="dash-readiness-tag">Курс начат</span>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div>
+            <div class="panel-card">
+              <h2 style="font-size: 1.2rem; margin-bottom: 16px;">Рекомендуемая тема для детального изучения</h2>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--color-border-glow); padding: 20px; border-radius: var(--radius-lg);" id="rec-box">
+                <span class="badge-status reviewing" id="rec-num">Вопрос #01</span>
+                <h3 style="font-size: 1.15rem; margin: 8px 0;" id="rec-title">Психология как наука</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;" id="rec-desc">Сущность предмета, методология и функции.</p>
+                <button class="ui-btn ui-btn-primary ui-btn-sm" id="btn-open-recommended">Открыть полный академический разбор и схемы →</button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="panel-card">
+              <h2 style="font-size: 1.2rem; margin-bottom: 16px;">15 Вопросов программы ПИМУ</h2>
+              <div style="display: flex; flex-direction: column; gap: 8px; max-height: 440px; overflow-y: auto;" id="mini-q-list"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: QUESTIONS -->
+      <section class="view-panel" id="tab-questions">
+        <div style="display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap;">
+          <input type="text" id="q-search" placeholder="Поиск по понятиям, авторам и схемам..." style="flex:1; background: var(--bg-surface-2); border:1px solid var(--color-border); color:#fff; padding:12px 18px; border-radius: var(--radius-md); outline:none; font-size:0.95rem;">
+        </div>
+        <div class="grid-questions" id="q-grid"></div>
+      </section>
+
+      <!-- TAB 3: FLASHCARDS -->
+      <section class="view-panel" id="tab-flashcards">
+        <div class="flashcard-stage-container">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px; color: var(--text-secondary);">
+            <span>Карточка <strong id="fc-idx" style="color:#fff;">1</strong> из 15</span>
+            <button class="ui-btn ui-btn-ghost ui-btn-sm" id="fc-shuffle">🔀 Перемешать</button>
+          </div>
+
+          <div class="card-3d-box" id="fc-card">
+            <div class="card-3d-face">
+              <span class="badge-status reviewing" id="fc-num">Вопрос #01</span>
+              <h2 id="fc-title" style="font-size: 1.3rem; text-align: center; margin: auto 0;">Загрузка...</h2>
+              <span style="font-size: 0.8rem; color: var(--text-tertiary); text-align: center;">Кликни, чтобы перевернуть 🔄</span>
+            </div>
+            <div class="card-3d-face card-3d-back">
+              <span class="badge-status mastered">Академический ответ из учебников</span>
+              <div style="overflow-y: auto; margin-top: 14px; font-size: 0.9rem; color: var(--text-secondary);" id="fc-body"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; margin-top: 24px;">
+            <button class="ui-btn ui-btn-ghost" id="fc-prev">← Назад</button>
+            <div style="display: flex; gap: 10px;">
+              <button class="ui-btn ui-btn-ghost" style="color: var(--accent-rose);" id="fc-mark-review">❌ На повторение</button>
+              <button class="ui-btn ui-btn-ghost" style="color: var(--accent-emerald);" id="fc-mark-mastered">✅ Выучено</button>
+            </div>
+            <button class="ui-btn ui-btn-ghost" id="fc-next">Вперед →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: QUIZZES -->
+      <section class="view-panel" id="tab-quizzes">
+        <div class="quiz-box" id="quiz-intro">
+          <h2 style="font-size: 1.5rem; text-align: center; margin-bottom: 12px;">Проверка знаний (Зачетный тест)</h2>
+          <p style="color: var(--text-secondary); text-align: center; margin-bottom: 24px;">10 концептуальных вопросов по всей программе вступительных испытаний ПИМУ.</p>
+          <div style="text-align: center;">
+            <button class="ui-btn ui-btn-primary ui-btn-lg" id="btn-start-quiz">Начать зачетный тест</button>
+          </div>
+        </div>
+
+        <div class="quiz-box hidden" id="quiz-run">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <span style="font-weight: 700; color: var(--accent-cyan);">Вопрос <span id="qz-curr">1</span> / <span id="qz-total">10</span></span>
+          </div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 20px;" id="qz-question">Загрузка...</h3>
+          <div id="qz-options"></div>
+          <div class="panel-card hidden" id="qz-exp" style="margin-top: 16px; background: rgba(0, 242, 254, 0.08);">
+            <p id="qz-exp-text" style="font-size: 0.9rem; color: var(--text-secondary);"></p>
+          </div>
+          <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+            <button class="ui-btn ui-btn-primary" id="qz-next-btn" disabled>Следующий вопрос →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: SOURCES -->
+      <section class="view-panel" id="tab-notebooklm">
+        <div class="panel-card">
+          <h2 style="font-size: 1.3rem; margin-bottom: 16px;">Загруженные академические источники (NotebookLM)</h2>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.8;">
+            Все разборы сформированы на основе проанализированных первоисточников:<br>
+            • <strong>Гамезо М. В., Домашенко И. А. — Атлас по психологии</strong><br>
+            • <strong>С.Л. Рубинштейн — Основы общей психологии</strong><br>
+            • <strong>Ю.Б. Гиппенрейтер — Введение в общую психологию</strong><br>
+            • <strong>Г.М. Андреева — Социальная психология</strong><br>
+            • <strong>А.Н. Леонтьев — Деятельность. Сознание. Личность</strong><br>
+            • <strong>Д.Б. Эльконин — Психология игры и периодизация развития</strong>
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
