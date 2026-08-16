@@ -1,0 +1,152 @@
+
+    /* Dashboard Layout */
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 360px; gap: 24px; }
+    .panel-card { background: var(--bg-surface-glass); backdrop-filter: blur(12px); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 24px; margin-bottom: 24px; }
+
+    /* Questions Grid */
+    .grid-questions { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .card-question {
+      background: var(--bg-surface-glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    .card-question::before { content: ''; position: absolute; top: 0; left: 20px; right: 20px; height: 2px; background: var(--color-border); border-radius: 2px; }
+    .card-question.mastered::before { background: var(--accent-emerald); }
+    .card-question.reviewing::before { background: var(--accent-amber); }
+    .card-question:hover { transform: translateY(-4px); border-color: rgba(0, 242, 254, 0.4); box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4); }
+
+    .badge-status { display: inline-block; font-size: 0.725rem; padding: 2px 8px; border-radius: 10px; font-weight: 700; text-transform: uppercase; }
+    .badge-status.unread { background: rgba(148, 163, 184, 0.15); color: var(--text-tertiary); }
+    .badge-status.reviewing { background: rgba(255, 183, 3, 0.15); color: var(--accent-amber); }
+    .badge-status.mastered { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
+
+    /* Flashcards 3D Stage */
+    .flashcard-stage-container { max-width: 680px; margin: 0 auto; perspective: 1000px; }
+    .card-3d-box { width: 100%; min-height: 420px; position: relative; transform-style: preserve-3d; transition: transform 0.5s ease; cursor: pointer; }
+    .card-3d-box.flipped { transform: rotateY(180deg); }
+    .card-3d-face {
+      position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: var(--radius-xl); padding: 36px;
+      display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(160deg, #101627, #18223c); border: 1px solid rgba(0, 242, 254, 0.3);
+    }
+    .card-3d-back { transform: rotateY(180deg); }
+
+    /* Quiz Box */
+    .quiz-box { background: var(--bg-surface-glass); border: 1px solid var(--color-border); border-radius: var(--radius-xl); padding: 36px; max-width: 720px; margin: 0 auto; }
+    .quiz-opt-btn {
+      width: 100%; text-align: left; padding: 14px 18px; border-radius: var(--radius-md); background: rgba(255,255,255,0.03); border: 1px solid var(--color-border);
+      color: #fff; font-size: 0.95rem; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px;
+    }
+    .quiz-opt-btn:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: var(--accent-blue); }
+    .quiz-opt-btn.correct { background: rgba(16,185,129,0.2) !important; border-color: var(--accent-emerald) !important; }
+    .quiz-opt-btn.incorrect { background: rgba(255,71,87,0.2) !important; border-color: var(--accent-rose) !important; }
+
+    /* Modal Window (Academic Rich Content) */
+    .app-modal-backdrop {
+      position: fixed; inset: 0; background: rgba(3, 5, 10, 0.92); backdrop-filter: blur(16px); z-index: 9999;
+      display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
+    }
+    .app-modal-backdrop.open { opacity: 1; pointer-events: auto; }
+    
+    .app-modal-card {
+      background: #0f1526; border: 1px solid var(--color-border-glow); border-radius: var(--radius-xl); width: 100%; max-width: 980px;
+      max-height: 94vh; display: flex; flex-direction: column; padding: 36px; box-shadow: 0 24px 60px rgba(0,0,0,0.85); position: relative;
+    }
+
+    .modal-close-icon { background: transparent; border: none; color: var(--text-secondary); font-size: 2rem; cursor: pointer; line-height: 1; }
+    .modal-status-pill { background: transparent; border: 1px solid var(--color-border); color: var(--text-secondary); padding: 5px 12px; border-radius: 12px; font-size: 0.825rem; cursor: pointer; }
+    .modal-status-pill.active { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.3); font-weight: 700; }
+
+    /* Rich Academic Content & Visual Diagram Styles */
+    .academic-content h3 { color: var(--accent-cyan); font-size: 1.15rem; margin: 24px 0 10px 0; border-bottom: 1px solid rgba(0, 242, 254, 0.2); padding-bottom: 6px; }
+    .academic-content h4 { color: #ffffff; font-size: 1rem; margin: 16px 0 6px 0; }
+    .academic-content p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 14px; text-align: justify; }
+    .academic-content ul, .academic-content ol { margin-left: 24px; margin-bottom: 16px; color: var(--text-secondary); font-size: 0.95rem; }
+    .academic-content li { margin-bottom: 8px; }
+    .academic-content blockquote { background: rgba(0, 242, 254, 0.06); border-left: 3px solid var(--accent-cyan); padding: 14px 18px; border-radius: 6px; margin: 16px 0; color: #f1f5f9; }
+    .academic-content pre { background: rgba(5, 7, 14, 0.9); border: 1px solid var(--color-border-glow); padding: 18px; border-radius: 10px; color: var(--accent-cyan); font-family: monospace; font-size: 0.85rem; overflow-x: auto; margin: 16px 0; line-height: 1.4; }
+
+    /* Formula Box & Legend */
+    .formula-box {
+      background: rgba(0, 242, 254, 0.06);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .formula-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+    .formula-eq {
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+    .formula-legend {
+      background: rgba(12, 16, 28, 0.85);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+    .formula-legend ul {
+      margin: 0;
+      padding-left: 18px;
+      list-style-type: disc;
+    }
+    .formula-legend li {
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+    .formula-legend strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Diagram Components */
+    .academic-diagram {
+      background: rgba(0, 242, 254, 0.04);
+      border: 1px solid rgba(0, 242, 254, 0.25);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .diagram-title {
+      color: var(--accent-cyan);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .diagram-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .diagram-flex {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .diagram-node {
+      background: rgba(16, 22, 38, 0.95);
+      border: 1px solid var(--accent-blue);
