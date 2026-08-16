@@ -1,0 +1,156 @@
+          <strong>Мотивация</strong> — это динамический процесс побуждения себя и других к деятельности. Полимотивированность деятельности: любое сложное действие побуждается не одним, а целой системой мотивов (смыслообразующие мотивы и мотивы-стимулы).</p>
+        `,
+        quiz: {
+          question: "Согласно А.Н. Леонтьеву, мотивом называется:",
+          options: ["Опредмеченная потребность", "Простой рефлекс", "Физиологический импульс"],
+          answer: 0, explanation: "Мотив — опредмеченная потребность."
+        }
+      },
+      {
+        id: 15, num: "15",
+        title: "Социальная психология группы: динамика, эксперименты С. Аша и теории Петровского",
+        category: "Блок 4: Социальная психология", status: "unread",
+        summary: "Классификация малых групп по Андреевой. Эксперимент Соломона Аша (1951 г.) по конформизму. Стратометрическая концепция А.В. Петровского.",
+        content: `
+          
+          <h3>1. Группа, ее признаки и виды</h3>
+          <p><strong>Группа</strong> — общность людей, объединенных общим признаком, деятельностью и системой отношений.</p>
+          <p><strong>Признаки малой группы:</strong> 1) Наличие контактов лицом к лицу, 2) Общая цель, 3) Структура ролей и статусов, 4) Групповые нормы, 5) Чувство "Мы".</p>
+          <p><strong>Виды групп:</strong> Условные / Реальные; Большие / Малые; Формальные (официальные) / Неформальные; Референтные (эталонные).</p>
+
+          <h3>2. Положение индивида в группе</h3>
+          <ul>
+            <li><strong>Статус:</strong> объективное место (ранг) индивида в иерархии группы (лидер, середняк, аутсайдер).</li>
+            <li><strong>Роль:</strong> нормативно заданный образец поведения, ожидаемый от обладателя статуса.</li>
+            <li><strong>Лидерство:</strong> процесс неформального влияния на группу (в отличие от формального руководства).</li>
+          </ul>
+<h3>3. Внутригрупповые феномены: Конформизм, Сплоченность и Совместимость</h3>
+          <p><strong>Совместимость:</strong> оптимальное сочетание психологических характеристик членов группы.<br><strong>Сплоченность:</strong> мера тяготения членов группы друг к другу (индекс по Морено).</p>
+          <h4>Эксперименты С. Аша по конформизму (групповое давление)</h4>
+          <p>В опытах со сравнением длин отрезков свыше <strong>37% испытуемых</strong> поддались ложному мнению «подставной группы» и продемонстрировали конформное поведение.</p>
+          
+          <div class="academic-diagram">
+            <div class="diagram-title">Схема 15.1: Стратометрическая концепция малой группы (А.В. Петровский)</div>
+            <div class="diagram-flex">
+              <div class="diagram-node">1. Внешний слой<br><small>Эмоциональные контакты, Социометрия</small></div>
+              <div class="diagram-arrow">➔</div>
+              <div class="diagram-node highlight">2. Второй слой (ЦОЕ)<br><small>Ценностно-ориентационное единство</small></div>
+              <div class="diagram-arrow">➔</div>
+              <div class="diagram-node">3. Ядерный слой<br><small>Совместная деятельность и общие цели</small></div>
+            </div>
+          </div>
+
+          <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│              ТИПЫ ПОВЕДЕНИЯ ПРИ ГРУППОВОМ ДАВЛЕНИИ                      │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+         ┌───────────────────────────┼───────────────────────────┐
+         ▼                           ▼                           ▼
+┌──────────────────┐        ┌──────────────────┐        ┌──────────────────┐
+│  ВНУТРИГРУППОВАЯ │        │   КОНФОРМНОСТЬ   │        │КОЛЛЕКТИВИСТИЧЕСКОЕ│
+│   ВНУШАЕМОСТЬ    │        │  (КОНФОРМИЗМ)    │        │ САМООПРЕДЕЛЕНИЕ  │
+└──────────────────┘        └──────────────────┘        └──────────────────┘
+          </pre>
+
+          <h3>2. Уровни развития группы (по А.В. Петровскому)</h3>
+          <p>Диффузная группа ➔ Ассоциация ➔ Корпорация ➔ <strong>Коллектив</strong> (высшая форма сплоченности на основе совместной предметной деятельности).</p>
+        `,
+        quiz: {
+          question: "Какой ученый сформулировал Стратометрическую концепцию групповой активности (ядерный слой, ЦОЕ, внешний слой)?",
+          options: ["А.В. Петровский", "Г.М. Андреева", "Б.Ф. Ломов"],
+          answer: 0, explanation: "А.В. Петровский разработал стратометрический подход."
+        }
+      }
+    ];
+
+    // BULLETPROOF STATE MANAGEMENT ACROSS ALL KEYS
+    const PRIMARY_KEY = 'pimu_user_study_progress_v1';
+    const ALL_HISTORICAL_KEYS = [
+      PRIMARY_KEY,
+      'pimu_user_progress_v1',
+      'pimu_questions_v105',
+      'pimu_questions_v104',
+      'pimu_questions_v103',
+      'pimu_questions_v102',
+      'pimu_questions_v101',
+      'pimu_questions_v100',
+      'pimu_questions_v1'
+    ];
+
+    // Read saved statuses from ALL historical keys in browser memory
+    let userSavedMap = {};
+    ALL_HISTORICAL_KEYS.forEach(k => {
+      try {
+        const stored = localStorage.getItem(k);
+        if (!stored) return;
+        const parsed = JSON.parse(stored);
+        
+        // Handle object map { 1: 'mastered', 2: 'reviewing' }
+        if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+          Object.keys(parsed).forEach(id => {
+            if (parsed[id] && parsed[id] !== 'unread') {
+              userSavedMap[id] = parsed[id];
+            }
+          });
+        }
+        
+        // Handle array format [{ id: 1, status: 'mastered' }]
+        if (Array.isArray(parsed)) {
+          parsed.forEach(item => {
+            if (item && item.id && item.status && item.status !== 'unread') {
+              userSavedMap[item.id] = item.status;
+            }
+          });
+        }
+      } catch(e) {}
+    });
+
+    // Apply saved status or default to 'unread'
+    let questions = DEEP_QUESTIONS.map(q => ({
+      ...q,
+      status: userSavedMap[q.id] || 'unread'
+    }));
+
+    let activeTab = 'dashboard';
+    let activeModalId = null;
+    let fcIndex = 0;
+    let quizState = { active: false, items: [], index: 0, score: 0 };
+
+    function saveState() {
+      const progressMap = {};
+      questions.forEach(q => {
+        progressMap[q.id] = q.status;
+      });
+      
+      // Save to PRIMARY_KEY and mirror to ALL keys so progress can NEVER be wiped
+      ALL_HISTORICAL_KEYS.forEach(k => {
+        try {
+          localStorage.setItem(k, JSON.stringify(progressMap));
+        } catch(e) {}
+      });
+
+      updateMetrics();
+    }
+
+    function updateMetrics() {
+      const mastered = questions.filter(q => q.status === 'mastered').length;
+      const pct = Math.round((mastered / questions.length) * 100);
+
+      document.getElementById('sb-progress-pct').textContent = pct + '%';
+      document.getElementById('sb-progress-fill').style.width = pct + '%';
+      
+      document.getElementById('dash-pct').textContent = pct + '%';
+      document.getElementById('dash-bar').style.width = pct + '%';
+      document.getElementById('dash-mastered-num').innerHTML = mastered + ' <small style="font-size: 1rem; color: var(--text-secondary);">/ 15</small>';
+    }
+
+    function triggerMathJax() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+      }
+    }
+
+    // Tabs Routing
+    document.querySelectorAll('.nav-link').forEach(btn => {
+      btn.addEventListener('click', (e) => {
