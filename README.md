@@ -1,1 +1,1 @@
-ПИМУ — курс подготовки. Сайт: index.html
+ПИМУ — курс подготовки. Сайт: https://diseasedq.github.io/pimu/
