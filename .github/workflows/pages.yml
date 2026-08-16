@@ -20,9 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble index.html
         run: |
-          if [ -f _parts/part0 ]; then
-            cat _parts/part0 _parts/part1 _parts/part2 _parts/part3 > index.html
-          fi
+          cat _parts/a _parts/b > index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
