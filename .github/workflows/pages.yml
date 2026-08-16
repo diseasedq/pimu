@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Assemble index.html
         run: |
-          cat _parts/a _parts/b > index.html
+          cat _parts/p1 _parts/p2 _parts/p3 _parts/p4 _parts/p5 > index.html
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
