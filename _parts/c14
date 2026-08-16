@@ -1,0 +1,147 @@
+        e.preventDefault();
+        const tab = btn.getAttribute('data-tab');
+        activeTab = tab;
+
+        document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        closeMobileNav();
+
+        if (tab === 'questions') renderQuestionsView();
+        if (tab === 'flashcards') renderFlashcardsView();
+        if (tab === 'dashboard') renderDashboardView();
+      });
+    });
+
+    // Render Dashboard
+    function renderDashboardView() {
+      const rec = questions.find(q => q.status !== 'mastered') || questions[0];
+      document.getElementById('rec-num').textContent = `Вопрос #${rec.num} • ${rec.category}`;
+      document.getElementById('rec-title').textContent = rec.title;
+      document.getElementById('rec-desc').textContent = rec.summary;
+      document.getElementById('btn-open-recommended').onclick = () => openModal(rec.id);
+
+      const miniList = document.getElementById('mini-q-list');
+      miniList.innerHTML = questions.map(q => `
+        <div style="display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.02); border:1px solid var(--color-border); border-radius:var(--radius-sm); cursor:pointer;" onclick="openModal(${q.id})">
+          <span style="font-weight:700; color:var(--accent-cyan); font-size:0.8rem;">#${q.num}</span>
+          <span style="font-size:0.85rem; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${q.title}</span>
+          <span class="badge-status ${q.status}">${q.status === 'mastered' ? '✓' : q.status === 'reviewing' ? '••' : '○'}</span>
+        </div>
+      `).join('');
+    }
+
+    // Render Questions Grid
+    function renderQuestionsView() {
+      const grid = document.getElementById('q-grid');
+      const search = document.getElementById('q-search').value.toLowerCase();
+      
+      const filtered = questions.filter(q => q.title.toLowerCase().includes(search) || q.summary.toLowerCase().includes(search));
+      
+      grid.innerHTML = filtered.map(q => `
+        <div class="card-question ${q.status}" onclick="openModal(${q.id})">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-weight:700; color:var(--accent-cyan); font-size:0.8rem;">Вопрос #${q.num}</span>
+              <span class="badge-status ${q.status}">${q.status === 'mastered' ? 'Выучено' : q.status === 'reviewing' ? 'В процессе' : 'Не начато'}</span>
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:8px;">${q.title}</h3>
+            <p style="color:var(--text-secondary); font-size:0.875rem;">${q.summary}</p>
+          </div>
+          <div style="padding-top:12px; margin-top:12px; border-top:1px solid var(--color-border); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; color:var(--text-tertiary);">${q.category}</span>
+            <span style="font-size:0.85rem; color:var(--accent-blue); font-weight:600;">Схемы и Разбор →</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('q-search').addEventListener('input', renderQuestionsView);
+
+    // Flashcards Controller
+    function renderFlashcardsView() {
+      const q = questions[fcIndex];
+      const card = document.getElementById('fc-card');
+      card.classList.remove('flipped');
+
+      document.getElementById('fc-idx').textContent = fcIndex + 1;
+      document.getElementById('fc-num').textContent = `Вопрос #${q.num} • ${q.category}`;
+      document.getElementById('fc-title').textContent = q.title;
+      document.getElementById('fc-body').innerHTML = `
+        <h4 style="color:var(--accent-cyan); margin-bottom:6px;">Академическая выжимка со схемами:</h4>
+        <p style="margin-bottom:12px;">${q.summary}</p>
+        ${q.content}
+      `;
+      triggerMathJax();
+    }
+
+    document.getElementById('fc-card').addEventListener('click', () => {
+      document.getElementById('fc-card').classList.toggle('flipped');
+    });
+
+    document.getElementById('fc-prev').onclick = () => { if (fcIndex > 0) fcIndex--; renderFlashcardsView(); };
+    document.getElementById('fc-next').onclick = () => { if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+    document.getElementById('fc-shuffle').onclick = () => { questions.sort(() => Math.random() - 0.5); fcIndex = 0; renderFlashcardsView(); };
+    document.getElementById('fc-mark-mastered').onclick = (e) => { e.stopPropagation(); questions[fcIndex].status = 'mastered'; saveState(); if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+    document.getElementById('fc-mark-review').onclick = (e) => { e.stopPropagation(); questions[fcIndex].status = 'reviewing'; saveState(); if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+
+    // Quiz Controller
+    document.getElementById('btn-start-quiz').onclick = () => {
+      quizState.items = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+      quizState.index = 0;
+      quizState.score = 0;
+      document.getElementById('quiz-intro').classList.add('hidden');
+      document.getElementById('quiz-run').classList.remove('hidden');
+      renderQuizQuestion();
+    };
+
+    function renderQuizQuestion() {
+      const q = quizState.items[quizState.index];
+      const qData = q.quiz;
+
+      document.getElementById('qz-curr').textContent = quizState.index + 1;
+      document.getElementById('qz-total').textContent = quizState.items.length;
+      document.getElementById('qz-question').textContent = qData.question;
+      
+      const opts = document.getElementById('qz-options');
+      opts.innerHTML = qData.options.map((opt, i) => `
+        <button class="quiz-opt-btn" onclick="checkQuizOption(${i})">
+          <strong style="color:var(--accent-cyan);">${['А', 'Б', 'В'][i]}.</strong>
+          <span>${opt}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('qz-exp').classList.add('hidden');
+      const nextBtn = document.getElementById('qz-next-btn');
+      nextBtn.disabled = true;
+      nextBtn.onclick = () => {
+        if (quizState.index < quizState.items.length - 1) {
+          quizState.index++;
+          renderQuizQuestion();
+        } else {
+          alert(`Зачетный тест завершен! Ваш результат: ${quizState.score} из ${quizState.items.length}`);
+          document.getElementById('quiz-run').classList.add('hidden');
+          document.getElementById('quiz-intro').classList.remove('hidden');
+        }
+      };
+    }
+
+    window.checkQuizOption = function(idx) {
+      const qData = quizState.items[quizState.index].quiz;
+      const btns = document.querySelectorAll('.quiz-opt-btn');
+      btns.forEach((b, i) => {
+        b.disabled = true;
+        if (i === qData.answer) b.classList.add('correct');
+        if (i === idx && i !== qData.answer) b.classList.add('incorrect');
+      });
+
+      if (idx === qData.answer) quizState.score++;
+      document.getElementById('qz-exp-text').textContent = qData.explanation;
+      document.getElementById('qz-exp').classList.remove('hidden');
+      document.getElementById('qz-next-btn').disabled = false;
+    };
+
+    // ACADEMIC MODAL CONTROLLER
+    const backdrop = document.getElementById('modal-backdrop');
