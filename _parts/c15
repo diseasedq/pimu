@@ -1,0 +1,69 @@
+    const closeBtn = document.getElementById('m-close-btn');
+
+    window.openModal = function(id) {
+      const q = questions.find(item => Number(item.id) === Number(id));
+      if (!q) return;
+
+      activeModalId = Number(id);
+      document.getElementById('m-num').textContent = `Вопрос #${q.num} • ${q.category}`;
+      document.getElementById('m-title').textContent = q.title;
+      document.getElementById('m-body').innerHTML = `
+        <div style="background:rgba(0,242,254,0.06); padding:18px; border-radius:var(--radius-md); margin-bottom:24px; border:1px solid rgba(0,242,254,0.25);">
+          <h4 style="color:var(--accent-cyan); font-size:0.95rem; margin-bottom:4px;">Краткая ориентация по вопросу:</h4>
+          <p style="color:#f1f5f9; margin:0; font-size:0.925rem;">${q.summary}</p>
+        </div>
+        ${q.content}
+      `;
+
+      document.querySelectorAll('.modal-status-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-status') === q.status);
+      });
+
+      backdrop.classList.add('open');
+      triggerMathJax();
+    };
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+    }
+
+    closeBtn.onclick = closeModal;
+    backdrop.onclick = (e) => { if (e.target === backdrop) closeModal(); };
+
+    document.querySelectorAll('.modal-status-pill').forEach(btn => {
+      btn.onclick = () => {
+        if (!activeModalId) return;
+        const st = btn.getAttribute('data-status');
+        const q = questions.find(item => item.id === activeModalId);
+        if (q) {
+          q.status = st;
+          saveState();
+          document.querySelectorAll('.modal-status-pill').forEach(b => b.classList.toggle('active', b.getAttribute('data-status') === st));
+          renderDashboardView();
+        }
+      };
+    });
+
+
+    function closeMobileNav() {
+      document.getElementById('app-sidebar')?.classList.remove('open');
+      document.getElementById('sidebar-overlay')?.classList.remove('open');
+    }
+    function openMobileNav() {
+      document.getElementById('app-sidebar')?.classList.add('open');
+      document.getElementById('sidebar-overlay')?.classList.add('open');
+    }
+    document.getElementById('menu-toggle')?.addEventListener('click', () => {
+      const sb = document.getElementById('app-sidebar');
+      if (sb?.classList.contains('open')) closeMobileNav();
+      else openMobileNav();
+    });
+    document.getElementById('sidebar-overlay')?.addEventListener('click', closeMobileNav);
+    document.getElementById('sidebar-close')?.addEventListener('click', closeMobileNav);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileNav(); });
+
+    // Initial render
+    renderDashboardView();
+  </script>
+</body>
+</html>
