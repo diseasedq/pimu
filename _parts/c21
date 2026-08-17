@@ -1,0 +1,129 @@
+ions[fcIndex].status = 'reviewing'; saveState(); if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+
+    // Quiz Controller
+    document.getElementById('btn-start-quiz').onclick = () => {
+      quizState.items = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+      quizState.index = 0;
+      quizState.score = 0;
+      document.getElementById('quiz-intro').classList.add('hidden');
+      document.getElementById('quiz-run').classList.remove('hidden');
+      renderQuizQuestion();
+    };
+
+    function renderQuizQuestion() {
+      const q = quizState.items[quizState.index];
+      const qData = q.quiz;
+
+      document.getElementById('qz-curr').textContent = quizState.index + 1;
+      document.getElementById('qz-total').textContent = quizState.items.length;
+      document.getElementById('qz-question').textContent = qData.question;
+      
+      const opts = document.getElementById('qz-options');
+      opts.innerHTML = qData.options.map((opt, i) => `
+        <button class="quiz-opt-btn" onclick="checkQuizOption(${i})">
+          <strong style="color:var(--accent-cyan);">${['А', 'Б', 'В'][i]}.</strong>
+          <span>${opt}</span>
+        </button>
+      `).join('');
+
+      document.getElementById('qz-exp').classList.add('hidden');
+      const nextBtn = document.getElementById('qz-next-btn');
+      nextBtn.disabled = true;
+      nextBtn.onclick = () => {
+        if (quizState.index < quizState.items.length - 1) {
+          quizState.index++;
+          renderQuizQuestion();
+        } else {
+          alert(`Зачетный тест завершен! Ваш результат: ${quizState.score} из ${quizState.items.length}`);
+          document.getElementById('quiz-run').classList.add('hidden');
+          document.getElementById('quiz-intro').classList.remove('hidden');
+        }
+      };
+    }
+
+    window.checkQuizOption = function(idx) {
+      const qData = quizState.items[quizState.index].quiz;
+      const btns = document.querySelectorAll('.quiz-opt-btn');
+      btns.forEach((b, i) => {
+        b.disabled = true;
+        if (i === qData.answer) b.classList.add('correct');
+        if (i === idx && i !== qData.answer) b.classList.add('incorrect');
+      });
+
+      if (idx === qData.answer) quizState.score++;
+      document.getElementById('qz-exp-text').textContent = qData.explanation;
+      document.getElementById('qz-exp').classList.remove('hidden');
+      document.getElementById('qz-next-btn').disabled = false;
+    };
+
+    // ACADEMIC MODAL CONTROLLER
+    const backdrop = document.getElementById('modal-backdrop');
+    const closeBtn = document.getElementById('m-close-btn');
+
+    window.openModal = function(id) {
+      const q = questions.find(item => Number(item.id) === Number(id));
+      if (!q) return;
+
+      activeModalId = Number(id);
+      document.getElementById('m-num').textContent = `Вопрос #${q.num} • ${q.category}`;
+      document.getElementById('m-title').textContent = q.title;
+      document.getElementById('m-body').innerHTML = `
+        <div style="background:rgba(0,242,254,0.06); padding:18px; border-radius:var(--radius-md); margin-bottom:24px; border:1px solid rgba(0,242,254,0.25);">
+          <h4 style="color:var(--accent-cyan); font-size:0.95rem; margin-bottom:4px;">Краткая ориентация по вопросу:</h4>
+          <p style="color:#f1f5f9; margin:0; font-size:0.925rem;">${q.summary}</p>
+        </div>
+        ${q.content}
+      `;
+
+      document.querySelectorAll('.modal-status-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-status') === q.status);
+      });
+
+      backdrop.classList.add('open');
+      triggerMathJax();
+    };
+
+    function closeModal() {
+      backdrop.classList.remove('open');
+    }
+
+    closeBtn.onclick = closeModal;
+    backdrop.onclick = (e) => { if (e.target === backdrop) closeModal(); };
+
+    document.querySelectorAll('.modal-status-pill').forEach(btn => {
+      btn.onclick = () => {
+        if (!activeModalId) return;
+        const st = btn.getAttribute('data-status');
+        const q = questions.find(item => item.id === activeModalId);
+        if (q) {
+          q.status = st;
+          saveState();
+          document.querySelectorAll('.modal-status-pill').forEach(b => b.classList.toggle('active', b.getAttribute('data-status') === st));
+          renderDashboardView();
+        }
+      };
+    });
+
+
+    function closeMobileNav() {
+      document.getElementById('app-sidebar')?.classList.remove('open');
+      document.getElementById('sidebar-overlay')?.classList.remove('open');
+    }
+    function openMobileNav() {
+      document.getElementById('app-sidebar')?.classList.add('open');
+      document.getElementById('sidebar-overlay')?.classList.add('open');
+    }
+    document.getElementById('menu-toggle')?.addEventListener('click', () => {
+      const sb = document.getElementById('app-sidebar');
+      if (sb?.classList.contains('open')) closeMobileNav();
+      else openMobileNav();
+    });
+    document.getElementById('sidebar-overlay')?.addEventListener('click', closeMobileNav);
+    document.getElementById('sidebar-close')?.addEventListener('click', closeMobileNav);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileNav(); });
+
+    // Initial render
+    renderDashboardView();
+  </script>
+</body>
+</html>

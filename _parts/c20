@@ -1,0 +1,152 @@
+sed[id];
+            }
+          });
+        }
+        
+        // Handle array format [{ id: 1, status: 'mastered' }]
+        if (Array.isArray(parsed)) {
+          parsed.forEach(item => {
+            if (item && item.id && item.status && item.status !== 'unread') {
+              userSavedMap[item.id] = item.status;
+            }
+          });
+        }
+      } catch(e) {}
+    });
+
+    // Apply saved status or default to 'unread'
+    let questions = DEEP_QUESTIONS.map(q => ({
+      ...q,
+      status: userSavedMap[q.id] || 'unread'
+    }));
+
+    let activeTab = 'dashboard';
+    let activeModalId = null;
+    let fcIndex = 0;
+    let quizState = { active: false, items: [], index: 0, score: 0 };
+
+    function saveState() {
+      const progressMap = {};
+      questions.forEach(q => {
+        progressMap[q.id] = q.status;
+      });
+      
+      // Save to PRIMARY_KEY and mirror to ALL keys so progress can NEVER be wiped
+      ALL_HISTORICAL_KEYS.forEach(k => {
+        try {
+          localStorage.setItem(k, JSON.stringify(progressMap));
+        } catch(e) {}
+      });
+
+      updateMetrics();
+    }
+
+    function updateMetrics() {
+      const mastered = questions.filter(q => q.status === 'mastered').length;
+      const pct = Math.round((mastered / questions.length) * 100);
+
+      document.getElementById('sb-progress-pct').textContent = pct + '%';
+      document.getElementById('sb-progress-fill').style.width = pct + '%';
+      
+      document.getElementById('dash-pct').textContent = pct + '%';
+      document.getElementById('dash-bar').style.width = pct + '%';
+      document.getElementById('dash-mastered-num').innerHTML = mastered + ' <small style="font-size: 1rem; color: var(--text-secondary);">/ 15</small>';
+    }
+
+    function triggerMathJax() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+      }
+    }
+
+    // Tabs Routing
+    document.querySelectorAll('.nav-link').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const tab = btn.getAttribute('data-tab');
+        activeTab = tab;
+
+        document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('tab-' + tab).classList.add('active');
+        closeMobileNav();
+
+        if (tab === 'questions') renderQuestionsView();
+        if (tab === 'flashcards') renderFlashcardsView();
+        if (tab === 'dashboard') renderDashboardView();
+      });
+    });
+
+    // Render Dashboard
+    function renderDashboardView() {
+      const rec = questions.find(q => q.status !== 'mastered') || questions[0];
+      document.getElementById('rec-num').textContent = `Вопрос #${rec.num} • ${rec.category}`;
+      document.getElementById('rec-title').textContent = rec.title;
+      document.getElementById('rec-desc').textContent = rec.summary;
+      document.getElementById('btn-open-recommended').onclick = () => openModal(rec.id);
+
+      const miniList = document.getElementById('mini-q-list');
+      miniList.innerHTML = questions.map(q => `
+        <div style="display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.02); border:1px solid var(--color-border); border-radius:var(--radius-sm); cursor:pointer;" onclick="openModal(${q.id})">
+          <span style="font-weight:700; color:var(--accent-cyan); font-size:0.8rem;">#${q.num}</span>
+          <span style="font-size:0.85rem; flex:1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${q.title}</span>
+          <span class="badge-status ${q.status}">${q.status === 'mastered' ? '✓' : q.status === 'reviewing' ? '••' : '○'}</span>
+        </div>
+      `).join('');
+    }
+
+    // Render Questions Grid
+    function renderQuestionsView() {
+      const grid = document.getElementById('q-grid');
+      const search = document.getElementById('q-search').value.toLowerCase();
+      
+      const filtered = questions.filter(q => q.title.toLowerCase().includes(search) || q.summary.toLowerCase().includes(search));
+      
+      grid.innerHTML = filtered.map(q => `
+        <div class="card-question ${q.status}" onclick="openModal(${q.id})">
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <span style="font-weight:700; color:var(--accent-cyan); font-size:0.8rem;">Вопрос #${q.num}</span>
+              <span class="badge-status ${q.status}">${q.status === 'mastered' ? 'Выучено' : q.status === 'reviewing' ? 'В процессе' : 'Не начато'}</span>
+            </div>
+            <h3 style="font-size:1.1rem; margin-bottom:8px;">${q.title}</h3>
+            <p style="color:var(--text-secondary); font-size:0.875rem;">${q.summary}</p>
+          </div>
+          <div style="padding-top:12px; margin-top:12px; border-top:1px solid var(--color-border); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.75rem; color:var(--text-tertiary);">${q.category}</span>
+            <span style="font-size:0.85rem; color:var(--accent-blue); font-weight:600;">Схемы и Разбор →</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('q-search').addEventListener('input', renderQuestionsView);
+
+    // Flashcards Controller
+    function renderFlashcardsView() {
+      const q = questions[fcIndex];
+      const card = document.getElementById('fc-card');
+      card.classList.remove('flipped');
+
+      document.getElementById('fc-idx').textContent = fcIndex + 1;
+      document.getElementById('fc-num').textContent = `Вопрос #${q.num} • ${q.category}`;
+      document.getElementById('fc-title').textContent = q.title;
+      document.getElementById('fc-body').innerHTML = `
+        <h4 style="color:var(--accent-cyan); margin-bottom:6px;">Академическая выжимка со схемами:</h4>
+        <p style="margin-bottom:12px;">${q.summary}</p>
+        ${q.content}
+      `;
+      triggerMathJax();
+    }
+
+    document.getElementById('fc-card').addEventListener('click', () => {
+      document.getElementById('fc-card').classList.toggle('flipped');
+    });
+
+    document.getElementById('fc-prev').onclick = () => { if (fcIndex > 0) fcIndex--; renderFlashcardsView(); };
+    document.getElementById('fc-next').onclick = () => { if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+    document.getElementById('fc-shuffle').onclick = () => { questions.sort(() => Math.random() - 0.5); fcIndex = 0; renderFlashcardsView(); };
+    document.getElementById('fc-mark-mastered').onclick = (e) => { e.stopPropagation(); questions[fcIndex].status = 'mastered'; saveState(); if (fcIndex < questions.length - 1) fcIndex++; renderFlashcardsView(); };
+    document.getElementById('fc-mark-review').onclick = (e) => { e.stopPropagation(); quest
