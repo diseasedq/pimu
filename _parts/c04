@@ -1,3 +1,31 @@
+e="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 4px;">
+          <span>Освоение предмета</span>
+          <strong style="color: var(--accent-cyan);" id="sb-progress-pct">0%</strong>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="sb-progress-fill" style="width: 0%;"></div></div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <header class="main-header">
+        <div class="header-meta">
+          <h1 id="page-title">Дашборд подготовки</h1>
+          <p id="page-sub">Академический курс освоения 15 вопросов вступительных испытаний ПИМУ</p>
+        </div>
+      </header>
+
+      <!-- TAB 1: DASHBOARD -->
+      <section class="view-panel active" id="tab-dashboard">
+        <div class="grid-stats">
+          <div class="card-stat card-stat-hero">
+            <div class="card-stat-title">Общий прогресс освоения</div>
+            <div class="card-stat-val" id="dash-pct">0%</div>
+            <div class="progress-track"><div class="progress-fill" id="dash-bar" style="width: 0%;"></div></div>
+          </div>
+          <div class="card-stat">
+            <div class="card-stat-title">Освоено тем</div>
+            <div class="card-stat-val" id="dash-mastered-num">0 <small style="font-size: 1rem; color: var(--text-secondary);">/ 15</small></div>
             <span class="badge-status mastered" id="dash-readiness-tag">Курс начат</span>
           </div>
         </div>
@@ -92,38 +120,4 @@
       <section class="view-panel" id="tab-notebooklm">
         <div class="panel-card">
           <h2 style="font-size: 1.3rem; margin-bottom: 16px;">Загруженные академические источники (NotebookLM)</h2>
-          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.8;">
-            Все разборы сформированы на основе проанализированных первоисточников:<br>
-            • <strong>Гамезо М. В., Домашенко И. А. — Атлас по психологии</strong><br>
-            • <strong>С.Л. Рубинштейн — Основы общей психологии</strong><br>
-            • <strong>Ю.Б. Гиппенрейтер — Введение в общую психологию</strong><br>
-            • <strong>Г.М. Андреева — Социальная психология</strong><br>
-            • <strong>А.Н. Леонтьев — Деятельность. Сознание. Личность</strong><br>
-            • <strong>Д.Б. Эльконин — Психология игры и периодизация развития</strong>
-          </p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <!-- ACADEMIC DETAILED MODAL WINDOW -->
-  <div class="app-modal-backdrop" id="modal-backdrop">
-    <div class="app-modal-card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
-        <span class="badge-status reviewing" id="m-num">Вопрос #01</span>
-        <button class="modal-close-icon" id="m-close-btn">&times;</button>
-      </div>
-      
-      <h2 id="m-title" style="font-size: 1.4rem; margin-bottom: 16px; color: #fff;">Заголовок вопроса</h2>
-
-      <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 8px 14px; border-radius: var(--radius-md); margin-bottom: 18px; font-size: 0.85rem;">
-        <span style="color: var(--text-secondary);">Статус освоения:</span>
-        <button class="modal-status-pill" data-status="unread">⚪ Не начато</button>
-        <button class="modal-status-pill" data-status="reviewing">🟡 В процессе</button>
-        <button class="modal-status-pill" data-status="mastered">🟢 Выучено</button>
-      </div>
-
-      <div class="academic-content" style="overflow-y: auto; flex: 1; padding-right: 14px;" id="m-body"></div>
-    </div>
-  </div>
-
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20p

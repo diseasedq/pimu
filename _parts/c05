@@ -1,3 +1,38 @@
+x; line-height: 1.8;">
+            Все разборы сформированы на основе проанализированных первоисточников:<br>
+            • <strong>Гамезо М. В., Домашенко И. А. — Атлас по психологии</strong><br>
+            • <strong>С.Л. Рубинштейн — Основы общей психологии</strong><br>
+            • <strong>Ю.Б. Гиппенрейтер — Введение в общую психологию</strong><br>
+            • <strong>Г.М. Андреева — Социальная психология</strong><br>
+            • <strong>А.Н. Леонтьев — Деятельность. Сознание. Личность</strong><br>
+            • <strong>Д.Б. Эльконин — Психология игры и периодизация развития</strong>
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ACADEMIC DETAILED MODAL WINDOW -->
+  <div class="app-modal-backdrop" id="modal-backdrop">
+    <div class="app-modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <span class="badge-status reviewing" id="m-num">Вопрос #01</span>
+        <button class="modal-close-icon" id="m-close-btn">&times;</button>
+      </div>
+      
+      <h2 id="m-title" style="font-size: 1.4rem; margin-bottom: 16px; color: #fff;">Заголовок вопроса</h2>
+
+      <div style="display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.03); padding: 8px 14px; border-radius: var(--radius-md); margin-bottom: 18px; font-size: 0.85rem;">
+        <span style="color: var(--text-secondary);">Статус освоения:</span>
+        <button class="modal-status-pill" data-status="unread">⚪ Не начато</button>
+        <button class="modal-status-pill" data-status="reviewing">🟡 В процессе</button>
+        <button class="modal-status-pill" data-status="mastered">🟢 Выучено</button>
+      </div>
+
+      <div class="academic-content" style="overflow-y: auto; flex: 1; padding-right: 14px;" id="m-body"></div>
+    </div>
+  </div>
+
   <!-- Complete Deep Academic Database WITH VISUAL DIAGRAMS & NOTEBOOKLM OUTPUTS -->
   <script>
     const DEEP_QUESTIONS = [
@@ -33,6 +68,9 @@
             <li><strong>Прикладные отрасли:</strong> Возрастная психология (онтогенез), Педагогическая (обучение и воспитание), Социальная (поведение в группах), Клиническая/Медицинская (патологии и психотерапия), Инженерная и Психология труда.</li>
           </ul>
 <h3>1.3 Объект и предмет психологии</h3>
+          <p><strong>Объект:</strong> психика. <strong>Предмет:</strong> закономерности психики.</p>
+          <h3>1.4 Место психологии в системе наук</h3>
+          <p>Психология занимает центральное место между естественными (биология, медицина) и общественными (социология, история) науками, а также тесно связана с философией. Б.М. Кедров поместил психологию в центр своего «треугольника наук».</p>
           <p><strong>Объект психологии</strong> — человек, группы людей, а также животные как носители психики и участники субъект-субъектных отношений.</p>
           <p><strong>Предмет психологии</strong> — специфические закономерности возникновения, формирования, функционирования и развития психики как особой формы жизнедеятельности.</p>
           
@@ -60,45 +98,4 @@
             <div class="diagram-flex">
               <div class="diagram-node">Естественные науки<br><small>(Физиология, Биология)</small></div>
               <div class="diagram-arrow">⇹</div>
-              <div class="diagram-node highlight">ПСИХОЛОГИЯ<br><small>(Центральное ядро)</small></div>
-              <div class="diagram-arrow">⇹</div>
-              <div class="diagram-node">Общественные науки<br><small>(Социология, История)</small></div>
-            </div>
-          </div>
-
-          <h3>3. Фундаментальные методологические принципы</h3>
-          <blockquote>
-            <strong>1. Принцип детерминизма (С.Л. Рубинштейн):</strong> Внешние причины действуют через внутренние условия.<br>
-            <strong>2. Принцип единства сознания и деятельности (А.Н. Леонтьев):</strong> Сознание формируется в деятельности и управляет ею.<br>
-            <strong>3. Принцип развития (Л.С. Выготский):</strong> Психика адекватно понимается только в процессах генеза.
-          </blockquote>
-        `,
-        quiz: {
-          question: "Кто в отечественной психологии сформулировал принцип детерминизма («внешние причины действуют через внутренние условия»)?",
-          options: ["С.Л. Рубинштейн", "А.Н. Леонтьев", "Л.С. Выготский"],
-          answer: 0, explanation: "С.Л. Рубинштейн обосновал принцип детерминизма."
-        }
-      },
-      {
-        id: 2, num: "02",
-        title: "Методы психологического исследования: эксперимент, наблюдение, психодиагностика",
-        category: "Блок 1: Введение и методология", status: "unread",
-        summary: "Полная 4-частная система методов Б.Г. Ананьева. Разбор лабораторного, естественного (Лазурский) и формирующего (Выготский) экспериментов, 4 этапов Гамезо и тестов.",
-        content: `
-          <div class="academic-diagram">
-            <div class="diagram-title">Схема 2.1: 4 системы методов психологического исследования (по Б.Г. Ананьеву)</div>
-            <div class="diagram-grid-4">
-              <div class="diagram-node">
-                <strong style="color:var(--accent-cyan); display:block; margin-bottom:4px;">1. Организационные</strong>
-                <small style="color:var(--text-secondary);">Сравнительный, Лонгитюдный, Комплексный</small>
-              </div>
-              <div class="diagram-node highlight">
-                <strong style="color:var(--accent-cyan); display:block; margin-bottom:4px;">2. Эмпирические</strong>
-                <small style="color:var(--text-secondary);">Эксперимент, Наблюдение, Тесты, Опрос</small>
-              </div>
-              <div class="diagram-node">
-                <strong style="color:var(--accent-cyan); display:block; margin-bottom:4px;">3. Обработки данных</strong>
-                <small style="color:var(--text-secondary);">Статистический, Качественный анализ</small>
-              </div>
-              <div class="diagram-node highlight">
-                <strong style="color:var(--accent-cyan); display:block; margin-bottom:4px;">4. Интерпретационные</strong>
+              <div class="diagram-node highlight">ПСИХОЛОГИЯ<br><small>(Центральное я
